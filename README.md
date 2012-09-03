@@ -11,3 +11,5 @@ OPMLExport provides a simple method to export all active folders, projects and t
 **Usage**
 
 > opmlexport > filename.opml
+
+
