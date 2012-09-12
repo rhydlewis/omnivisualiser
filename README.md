@@ -10,11 +10,9 @@ OPMLExport provides a simple method to export all active folders, projects and t
 
 ### Notes
 
-I've tested this on ruby 1.8.7 (the default version provided in Mountain Lion).
+I've tested this on ruby 1.9.3 installed using [RVM](https://rvm.io/).
 
 ### Installation
-
-_I don't think you need to install the XCode developer tools but I could be wrong..._
 
 1. sudo gem install rb-appscript
 2. sudo gem install builder

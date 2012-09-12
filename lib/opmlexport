@@ -1,4 +1,4 @@
-#! /usr/bin/env ruby
+#! /usr/bin/env ruby -I ../lib/
 
 # == Synopsis 
 #   OPMLExport provides a simple method to export all active folders, projects and tasks as an OPML file.
@@ -17,6 +17,7 @@ require 'omnivisualiser/project'
 require 'omnivisualiser/task'
 require 'omnivisualiser/omnifocus'
 require 'builder'
+require 'time'
 
 module OmniVisualiser
   class OPMLExport
