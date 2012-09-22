@@ -1,21 +1,8 @@
-#! /usr/bin/env ruby -I ../lib/
-
 # == Synopsis 
-#   OPMLExport provides a simple method to export all active folders, projects and tasks as an OPML file.
-#   This script only renders non-completed or non-dropped projects and actions.
-#   It requires rb-appscript and builder (installable with rubygems). 
-#
-# == Usage 
-#   opmlexport > filename.opml
 #
 # == Author
 #   Rhyd Lewis
 
-require 'omnivisualiser/item'
-require 'omnivisualiser/folder'
-require 'omnivisualiser/project'
-require 'omnivisualiser/task'
-require 'omnivisualiser/omnifocus'
 require 'builder'
 require 'time'
 
@@ -27,21 +14,35 @@ module OmniVisualiser
     @builder
     
     def initialize()
+
+    end
+    
+    def export(json)
       @builder = Builder::XmlMarkup.new(:target => STDOUT, :indent => 2)
       @builder.opml(:version => 1.1) do
+      
+        # Write XML header
         write_header()
+        
+        # Iterate through JSON and write out XML body 
         @builder.body do
-        	# get the OF wrapper
-          of = OmniVisualiser::OmniFocus.new(Appscript.app('OmniFocus').default_document)
           
+          # Export inbox tasks
+          i = json.find { |item| item["Inbox"] }
+          i["Inbox"].each { |t| parse_task(t) }
+                    
           # iterate through each top-level folder and parse
-          of.folders.each { |sf| parse_folder(sf) }
+          f = json.find { |item| item["Folders"] }
+          f["Folders"].each { |sf| parse_folder(sf) }
 
           # iterate through each top-level project outside of a folder and parse
-          of.projects.each { |p| parse_project(p) }
+          p = json.find { |item| item["Projects"] }
+          p["Projects"].each { |p| parse_project(p) }
         end
       end
     end
+    
+    protected
     
     # write standard OPML header
     # @TODO: add cmd line options to set owner name, email etc.
@@ -57,32 +58,31 @@ module OmniVisualiser
   
   	# Write folder details as OPML and look into next level down for more folders/projects
     def parse_folder(f)
-      @builder.outline("text" => f.name(), "type" => "link", "url" => f.url(), "created" => f.creation_date()) do
-        f.subfolders.each { |sf| parse_folder(sf) }
-        f.projects().each { |p| parse_project(p) }
+      @builder.outline("text" => f["name"], "type" => "link", "url" => f["url"], "created" => f["created"]) do
+        f["folders"].each { |sf| parse_folder(sf) }
+        f["projects"].each { |p| parse_project(p) }
       end
     end
     
   	# Write project details as OPML and look into next level down for more tasks
     def parse_project(p)
-      if (p.status() == :dropped || p.status() == :done)
+      if (p["status"] == "dropped" || p["status"] == "done")
         return
       end
-      @builder.outline("text" => p.name(), "type" => "link", "url" => p.url(), "created" => p.creation_date()) do
-        p.tasks().each { |t| parse_task(t) }
+      @builder.outline("text" => p["name"], "type" => "link", "url" => p["url"], "created" => p["created"]) do
+        p["tasks"].each { |t| parse_task(t) }
       end
     end
     
   	# Write task details as OPML and look into next level down for more tasks
     def parse_task(t)
-      if (t.completed) 
+      if (t["completed"] == true) 
         return
       end
-      @builder.outline("text" => t.name(), "type" => "link", "url" => t.url(), "created" => t.creation_date()) do
-      	t.tasks().each { |st| parse_task(st) }
+      
+      @builder.outline("text" => t["name"], "type" => "link", "url" => t["url"], "created" => t["created"]) do
+      	t["tasks"].each { |st| parse_task(st) }
       end
     end
   end
 end
-
-OmniVisualiser::OPMLExport.new()
