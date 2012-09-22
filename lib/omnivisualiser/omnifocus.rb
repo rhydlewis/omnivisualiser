@@ -15,7 +15,10 @@ require 'appscript'
 include Appscript
 
 module OmniVisualiser
-  class OmniFocus  
+  class OmniFocus
+  
+  	@hash
+  	
     def initialize(omnifocus_app)
       @omnifocus = omnifocus_app
     end
@@ -45,9 +48,9 @@ module OmniVisualiser
 #       return incomplete_tasks
 #     end
 # 
-#     def inbox_tasks()
-#       omnifocus.inbox_tasks.get.flatten.map { |t| Task.new(omnifocus, t) }
-#     end
+    def inbox_tasks()
+      omnifocus.inbox_tasks.get.flatten.map { |t| Task.new(omnifocus, t) }
+    end
 #   
 #     def all_folders()
 #       self.omnifocus.flattened_folders.get.map { |f| Folder.new(omnifocus, f) }
@@ -68,5 +71,26 @@ module OmniVisualiser
     def projects()
       self.omnifocus.projects.get.map { |p| Project.new(omnifocus, p) }
     end
+    
+    def to_hash()
+    	@hash = []
+
+    	# Add inbox tasks
+    	inbox_hash = []
+    	inbox_tasks.each { |t| inbox_hash << t.to_hash() }
+    	@hash << { "Inbox" => inbox_hash }
+    	
+    	# iterate through each top-level folder and parse
+    	folders_hash = []
+    	folders.each { |f| folders_hash << f.to_hash() }
+    	@hash << { "Folders" => folders_hash }
+
+      # iterate through each top-level project outside of a folder and parse
+    	projects_hash = []
+    	projects.each { |p| projects_hash << p.to_hash() }
+    	@hash << { "Projects" => projects_hash }
+
+			return @hash
+    end    
   end
 end

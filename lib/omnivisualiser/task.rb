@@ -18,6 +18,10 @@ module OmniVisualiser
       item.due_date.get == :missing_value ? nil : item.due_date.get
     end
 
+    def start_date()
+      item.start_date.get == :missing_value ? nil : item.start_date.get
+    end
+
     def completed()
       item.completed.get == :missing_value ? false : item.completed.get
     end
@@ -41,5 +45,13 @@ module OmniVisualiser
     def to_s()
       url + ", name " + name + ", flagged " + flagged.to_s + ", due " + due_date.to_s + ", completed " + completed.to_s + ", context " + context.to_s
     end
+    
+    def to_hash()
+    	tasks_hash = []
+    	tasks.each { |st| tasks_hash << st.to_hash() }    	
+    	return { :name => name, :url => url, :created => creation_date, :completed => completed, :context => context.to_s,
+    		:flagged => flagged, :due_date => due_date, :start_date => start_date, :tasks => tasks_hash
+    	}
+    end       
   end
 end
