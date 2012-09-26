@@ -19,7 +19,8 @@ module OmniVisualiser
     	p_hash = []
     	subfolders.each { |sf| sf_hash << sf.to_hash() }
     	projects.each { |p| p_hash << p.to_hash() }
-    	return { :name => name, :url => url, :created => creation_date.to_s, :folders => sf_hash, :projects => p_hash }
+    	return { :name => name, :url => url, :created => creation_date.to_s, 
+    		:type => "folder", :folders => sf_hash, :projects => p_hash }
     end       
     
     def subfolders()

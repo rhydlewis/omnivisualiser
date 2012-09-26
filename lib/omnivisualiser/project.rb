@@ -29,7 +29,8 @@ module OmniVisualiser
 		def to_hash()
     	tasks_hash = []
     	tasks.each { |t| tasks_hash << t.to_hash() }    	
-    	return { :name => name, :url => url, :created => creation_date, :status => status, :folder => folder, :tasks => tasks_hash}
+    	return { :name => name, :url => url, :created => creation_date, :status => status, 
+    		:folder => folder, :type => "project", :tasks => tasks_hash}
     end       
   end
 end

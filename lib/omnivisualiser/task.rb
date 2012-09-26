@@ -43,14 +43,16 @@ module OmniVisualiser
     end
     
     def to_s()
-      url + ", name " + name + ", flagged " + flagged.to_s + ", due " + due_date.to_s + ", completed " + completed.to_s + ", context " + context.to_s
+      url + ", name " + name + ", flagged " + flagged.to_s + ", due " + due_date.to_s + 
+      	", completed " + completed.to_s + ", context " + context.to_s
     end
     
     def to_hash()
     	tasks_hash = []
     	tasks.each { |st| tasks_hash << st.to_hash() }    	
-    	return { :name => name, :url => url, :created => creation_date, :completed => completed, :context => context.to_s,
-    		:flagged => flagged, :due_date => due_date, :start_date => start_date, :tasks => tasks_hash
+    	return { :name => name, :url => url, :created => creation_date, :completed => completed, 
+    		:context => context.to_s, :flagged => flagged, :due_date => due_date, 
+    		:start_date => start_date, :type => "task", :tasks => tasks_hash
     	}
     end       
   end

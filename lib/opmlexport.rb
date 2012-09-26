@@ -35,15 +35,21 @@ module OmniVisualiser
                     
           # iterate through each top-level folder and parse
           @builder.outline("text" => "Library", "type" => "text") do
-            f = json.find { |item| item["Folders"] }
-            if (f != nil)
-              f["Folders"].each { |sf| parse_folder(sf) }
-            end
-  
-            # iterate through each top-level project outside of a folder and parse
-            p = json.find { |item| item["Projects"] }
-            if (p != nil)
-              p["Projects"].each { |p| parse_project(p) }
+            
+            library = json.find { |item| item["Library"] }
+            
+            if (library != nil)
+              library["Library"].each { |item|
+                type = item["type"]
+
+                if (type == "folder")
+                  parse_folder(item)
+                elsif (type == "project")
+                  parse_project(item)
+                else
+                  puts "ERROR: found unexpected type '" + type + "'"
+                end
+              }
             end
           end
         end
