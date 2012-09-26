@@ -17,8 +17,8 @@ module OmniVisualiser
 
     end
     
-    def export(json)
-      @builder = Builder::XmlMarkup.new(:target => STDOUT, :indent => 2)
+    def export(json, target)
+      @builder = Builder::XmlMarkup.new(:target => target, :indent => 2)
       @builder.opml(:version => 1.1) do
       
         # Write XML header
@@ -29,15 +29,23 @@ module OmniVisualiser
           
           # Export inbox tasks
           i = json.find { |item| item["Inbox"] }
-          i["Inbox"].each { |t| parse_task(t) }
+          @builder.outline("text" => "Inbox", "type" => "text") do
+              i["Inbox"].each { |t| parse_task(t) }
+          end
                     
           # iterate through each top-level folder and parse
-          f = json.find { |item| item["Folders"] }
-          f["Folders"].each { |sf| parse_folder(sf) }
-
-          # iterate through each top-level project outside of a folder and parse
-          p = json.find { |item| item["Projects"] }
-          p["Projects"].each { |p| parse_project(p) }
+          @builder.outline("text" => "Library", "type" => "text") do
+            f = json.find { |item| item["Folders"] }
+            if (f != nil)
+              f["Folders"].each { |sf| parse_folder(sf) }
+            end
+  
+            # iterate through each top-level project outside of a folder and parse
+            p = json.find { |item| item["Projects"] }
+            if (p != nil)
+              p["Projects"].each { |p| parse_project(p) }
+            end
+          end
         end
       end
     end

@@ -74,21 +74,22 @@ module OmniVisualiser
     
     def to_hash()
     	@hash = []
+    	i = []
+    	f = []
+    	p = []
 
     	# Add inbox tasks
-    	inbox_hash = []
-    	inbox_tasks.each { |t| inbox_hash << t.to_hash() }
-    	@hash << { "Inbox" => inbox_hash }
+    	inbox_tasks.each { |item| i << item.to_hash() }
     	
     	# iterate through each top-level folder and parse
-    	folders_hash = []
-    	folders.each { |f| folders_hash << f.to_hash() }
-    	@hash << { "Folders" => folders_hash }
+    	folders.each { |item| f << item.to_hash() }
 
       # iterate through each top-level project outside of a folder and parse
-    	projects_hash = []
-    	projects.each { |p| projects_hash << p.to_hash() }
-    	@hash << { "Projects" => projects_hash }
+    	projects.each { |item| p << item.to_hash() }
+
+			library = { "Folders" => f, "Projects" => p}
+    	@hash << { "Inbox" => i }
+    	@hash << { "Library" => library }
 
 			return @hash
     end    

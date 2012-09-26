@@ -32,8 +32,8 @@ class Visualise
   end
   
   def as_opml()
-    OmniVisualiser::OPMLExport.new().export(JSON.parse(IO.read("./test.json")))
-#     OmniVisualiser::OPMLExport.new().export(as_json)
+#     OmniVisualiser::OPMLExport.new().export(JSON.parse(IO.read("./test.json")))
+    OmniVisualiser::OPMLExport.new().export(as_json, STDOUT)
   end
   
   def as_kanban()
@@ -56,4 +56,4 @@ class Visualise
 end
 
 app = Visualise.new(ARGV, STDIN)
-puts app.as_opml
+puts app.as_json_string
