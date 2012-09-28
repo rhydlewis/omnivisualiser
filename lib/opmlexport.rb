@@ -106,9 +106,7 @@ module OmniVisualiser
     
   	# Write task details as OPML and look into next level down for more tasks
     def parse_task(t)
-      is_completed = t["status"] == "completed"
-
-      if (is_completed && !@include_completed) 
+      if (t["completed"] && !@include_completed) 
         return
       end
       

@@ -1,11 +1,18 @@
-#! /usr/bin/env ruby -I ../lib/
+#! /usr/bin/env ruby
 
 # == Synopsis 
 #
 # == Usage 
+# Usage: oexport [options] format
+#   where 'format' is either:\n" +
+#     * 'opml' to output OmniFocus data as OPML data
+#     * 'json' to output OmniFocus data as a JSON string
+#     * 'hash' to output OmniFocus data as {data}.inspect
 #
 # == Options
 #   -h, --help          Displays help message
+#   -d, --dropped       Include dropped projects in output
+#   -c, --completed     Include completed projects and tasks in output
 #
 # == Author
 #   Rhyd Lewis
@@ -53,12 +60,6 @@ class OExport
 
   protected
 
-    def output_options
-      @options.marshal_dump.each do |name, val|        
-        puts "  #{name}: #{val}"
-      end
-    end
-
     def parsed_options?
       
       # Specify options
@@ -80,7 +81,6 @@ class OExport
     
     # True if required arguments were provided
     def arguments_valid?
-      # TO DO - implement your real logic here      
       @arguments.length == 1 ? true : false
     end
 
