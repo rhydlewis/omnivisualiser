@@ -18,13 +18,25 @@ module OmniVisualiser
       item.hidden.get ? "dropped" : "active"
     end
     
-		def to_hash()
-    	sf_hash = []
-    	p_hash = []
-    	subfolders.each { |sf| sf_hash << sf.to_hash() }
-    	projects.each { |p| p_hash << p.to_hash() }
+		def to_hash(include_completed, include_dropped)
+      if (status == "dropped" && !@include_dropped)
+        return nil
+      end
+
+    	child_folders = []
+    	subfolders.each { |item| 
+    		sf = item.to_hash(include_completed, include_dropped) 
+    		child_folders << sf unless sf.nil?
+    	}
+
+    	child_projects = []
+    	projects.each { |item| 
+    		p = item.to_hash(include_completed, include_dropped)
+    		child_projects << p unless p.nil?
+    	}
+    	
     	return { :name => name, :url => url, :created => creation_date.to_s, :status => status, 
-    		:type => "folder", :folders => sf_hash, :projects => p_hash }
+    		:type => "folder", :folders => child_folders, :projects => child_projects }
     end       
     
     def subfolders()

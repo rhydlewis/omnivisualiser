@@ -72,19 +72,24 @@ module OmniVisualiser
       self.omnifocus.projects.get.map { |p| Project.new(omnifocus, p) }
     end
     
-    def to_hash()
+    def to_hash(include_completed, include_dropped)
     	@hash = []
     	tasks = []
     	library = []
 
     	# Add inbox tasks
-    	inbox_tasks.each { |item| tasks << item.to_hash() }
+    	inbox_tasks.each { |item| 
+    		task = item.to_hash(include_completed)
+    		if (task != nil)
+	    		tasks << task
+    		end
+    	}
     	
     	# iterate through each top-level folder and parse
-    	folders.each { |item| library << item.to_hash() }
+    	folders.each { |item| library << item.to_hash(include_completed, include_dropped) }
 
       # iterate through each top-level project outside of a folder and parse
-    	projects.each { |item| library << item.to_hash() }
+#     	projects.each { |item| library << item.to_hash(include_completed, include_dropped) }
 
     	@hash << { "Inbox" => tasks }
     	@hash << { "Library" => library }

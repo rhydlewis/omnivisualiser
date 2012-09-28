@@ -47,12 +47,21 @@ module OmniVisualiser
       	", completed " + completed.to_s + ", context " + context.to_s
     end
     
-    def to_hash()
-    	tasks_hash = []
-    	tasks.each { |st| tasks_hash << st.to_hash() }    	
+    def to_hash(include_completed)
+    
+    	if (completed && !include_completed)
+#     		puts "Ignoring " + to_s 
+    		return nil
+    	end
+    
+    	sub_tasks = []
+    	tasks.each { |item|
+    		st = item.to_hash(include_completed)
+    		sub_tasks << st unless st.nil?
+    	}
     	return { :name => name, :url => url, :created => creation_date, :completed => completed, 
     		:context => context.to_s, :flagged => flagged, :due_date => due_date, 
-    		:start_date => start_date, :type => "task", :tasks => tasks_hash
+    		:start_date => start_date, :type => "task", :tasks => sub_tasks
     	}
     end       
   end

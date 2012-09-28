@@ -26,11 +26,21 @@ module OmniVisualiser
       "omnifocus:///task/" + id
     end
     
-		def to_hash()
-    	tasks_hash = []
-    	tasks.each { |t| tasks_hash << t.to_hash() }    	
+		def to_hash(include_completed, include_dropped)
+      is_dropped = status == "dropped"
+      is_completed = status == "done"
+    
+      if (is_dropped && !include_dropped || is_completed && !include_completed)
+        return nil
+      end
+			
+    	sub_tasks = []
+			tasks.each { |item|
+    		st = item.to_hash(include_completed)
+    		sub_tasks << st unless st.nil?
+    	}
     	return { :name => name, :url => url, :created => creation_date, :status => status, 
-    		:folder => folder, :type => "project", :tasks => tasks_hash}
+    		:folder => folder, :type => "project", :tasks => sub_tasks}
     end       
   end
 end

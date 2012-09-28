@@ -8,7 +8,7 @@ end
 
 When /^I export my OmniFocus content to OPML$/ do
   @result = ""
-  @opml.export(@json, @result, true, true)
+  @opml.export(@json, @result)#, true, true)
 end
 
 Then /^I see an OPML representation of my OmniFocus content$/ do

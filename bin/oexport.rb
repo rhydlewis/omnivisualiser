@@ -100,7 +100,7 @@ class OExport
 
     def as_opml
       opml = ""
-      OmniVisualiser::OPMLExport.new.export(JSON.parse(as_json), opml, @options.completed, @options.dropped)
+      OmniVisualiser::OPMLExport.new.export(JSON.parse(as_json), opml)
       return opml
     end
     
@@ -110,7 +110,7 @@ class OExport
   
     def as_hash
       of = OmniVisualiser::OmniFocus.new(Appscript.app('OmniFocus').default_document)
-      return of.to_hash
+      return of.to_hash(@options.completed, @options.dropped)
     end
     
     def usage_and_exit
