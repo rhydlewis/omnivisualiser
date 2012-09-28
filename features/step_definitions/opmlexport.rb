@@ -8,7 +8,7 @@ end
 
 When /^I export my OmniFocus content to OPML$/ do
   @result = ""
-  @opml.export(@json, @result)
+  @opml.export(@json, @result, true, true)
 end
 
 Then /^I see an OPML representation of my OmniFocus content$/ do
@@ -50,15 +50,18 @@ def create_json(table)
 end
 
 def create_task(row)
-  return { "name" => row["Task Name"], "type" => "task", "url" => row["Task Link"], "created" => row["Task Created"], "tasks" => []}
+  return { "name" => row["Task Name"], "type" => "task", "url" => row["Task Link"], 
+    "created" => row["Task Created"], "tasks" => []}
 end
 
 def create_project(name, row)
-  return { "name" => name, "url" => row["Parent Link"], "created" => row["Parent Created"], "type" => "project", "tasks" => [] } 
+  return { "name" => name, "url" => row["Parent Link"], "created" => row["Parent Created"], 
+    "type" => "project", "tasks" => [] } 
 end
 
 def create_folder(name, row, projects)
-  return { "name" => name, "url" => row["Parent Link"], "created" => row["Parent Created"], "type" => "folder", "projects" => projects, "folders" => [] } 
+  return { "name" => name, "url" => row["Parent Link"], "created" => row["Parent Created"], 
+    "type" => "folder", "projects" => projects, "folders" => [] } 
 end
 
 def verify_opml()

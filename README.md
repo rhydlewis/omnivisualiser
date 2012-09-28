@@ -4,9 +4,9 @@
 
 Tools to help visualise OmniFocus in different formats.
 
-## OPMLExport
+## OExport
 
-OPMLExport provides a simple method to export all active folders, projects and tasks as OPML. It requires rb-appscript and builder (installable with rubygems).
+OExport allows you to export all active folders, projects and tasks as OPML. It requires rb-appscript and builder (installable with rubygems).
 
 ### Notes
 
@@ -19,7 +19,7 @@ I've tested this on ruby 1.9.3 installed using [RVM](https://rvm.io/).
 
 ### Usage
 
-> opmlexport > filename.opml
+> ./oexport > filename.opml
 
 ### TODO
 

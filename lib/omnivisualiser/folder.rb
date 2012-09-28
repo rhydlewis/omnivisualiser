@@ -14,12 +14,16 @@ module OmniVisualiser
       url + " " + name 
     end
     
+    def status()
+      item.hidden.get ? "dropped" : "active"
+    end
+    
 		def to_hash()
     	sf_hash = []
     	p_hash = []
     	subfolders.each { |sf| sf_hash << sf.to_hash() }
     	projects.each { |p| p_hash << p.to_hash() }
-    	return { :name => name, :url => url, :created => creation_date.to_s, 
+    	return { :name => name, :url => url, :created => creation_date.to_s, :status => status, 
     		:type => "folder", :folders => sf_hash, :projects => p_hash }
     end       
     

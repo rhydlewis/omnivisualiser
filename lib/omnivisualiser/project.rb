@@ -10,12 +10,12 @@ module OmniVisualiser
       item.tasks.get.map { |t| Task.new omnifocus, t }
     end
     
-    def status()
-      item.status.get
-    end
-    
     def folder()
       item.folder.get == :missing_value ? nil : item.folder.get
+    end
+    
+    def status()
+      item.status.get
     end
     
     def to_s()
