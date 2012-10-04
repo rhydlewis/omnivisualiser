@@ -9,20 +9,8 @@ require 'time'
 module OmniVisualiser
   class OPMLExport
     VERSION = '0.1'
-
-# used to build OPML file
-#     @builder
-#     @completed
-#     @dropped
     
-    def initialize()
-
-    end
-    
-    def export(json, target)#, completed, dropped)
-#       @include_completed = completed
-#       @include_dropped = dropped
-#       @builder = Builder::XmlMarkup.new(:target => STDOUT, :indent => 2) #:target => target, :indent => 2)
+    def export(json, target)
       @builder = Builder::XmlMarkup.new(:target => target, :indent => 2)
       @builder.opml(:version => 1.1) do
       
@@ -78,12 +66,6 @@ module OmniVisualiser
   
   	# Write folder details as OPML and look into next level down for more folders/projects
     def parse_folder(f)
-#       is_dropped = f["status"] == "dropped"
-# 
-#       if (is_dropped && !@include_dropped)
-#         return
-#       end
-
       @builder.outline("text" => f["name"], "type" => "link", "url" => f["url"], "created" => f["created"]) do
         f["folders"].each { |sf| parse_folder(sf) }
         f["projects"].each { |p| parse_project(p) }
@@ -92,13 +74,6 @@ module OmniVisualiser
     
   	# Write project details as OPML and look into next level down for more tasks
     def parse_project(p)
-#       is_dropped = p["status"] == "dropped"
-#       is_completed = p["status"] == "done"
-#     
-#       if (is_dropped && !@include_dropped || is_completed && !@include_completed)
-#         return
-#       end
-#       
       @builder.outline("text" => p["name"], "type" => "link", "url" => p["url"], "created" => p["created"]) do
         p["tasks"].each { |t| parse_task(t) }
       end
@@ -106,10 +81,6 @@ module OmniVisualiser
     
   	# Write task details as OPML and look into next level down for more tasks
     def parse_task(t)
-#       if (t["completed"] && !@include_completed) 
-#         return
-#       end
-
       @builder.outline("text" => t["name"], "type" => "link", "url" => t["url"], "created" => t["created"]) do
       	t["tasks"].each { |st| parse_task(st) }
       end

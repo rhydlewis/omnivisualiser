@@ -6,7 +6,8 @@ Tools to help visualise OmniFocus in different formats.
 
 ## OExport
 
-OExport allows you to export all active folders, projects and tasks as OPML. It requires rb-appscript and builder (installable with rubygems).
+OExport allows you to export OmniFocus data as JSON, OPML or a Ruby hash. It requires 
+rb-appscript and builder (installable with rubygems).
 
 ### Notes
 
@@ -19,18 +20,41 @@ I've tested this on ruby 1.9.3 installed using [RVM](https://rvm.io/).
 
 ### Usage
 
-> ./oexport > filename.opml
+#### Command line options
+
+ -h, --help     Displays help message   
+ -d, --dropped     Include dropped folders and projects in output  
+ -c, --completed     Include completed projects and tasks in output  
+
+### Example usage
+
+	$ oexport JSON > omnifocus.json
+
+This will export your active OmniFocus folders, projects and tasks as a JSON string to the file 'omnifocus.json'
+
+	$ oexport -d -c OPML > omnifocus.opml
+
+This will export all OmniFocus data as OPML to the file 'omnifocus.opml'
 
 ### TODO
 
-* tests
+* review and improve tests (swap out Cucumber for RSpec)
 * add command line options to specify:
-    * filtering (e.g. include done, dropped, etc.) 
     * OPML header info
+
+## Author
+
+Rhyd Lewis
+
+## Copyright
+
+Copyright (c) 2011 Rhyd Lewis.
 
 ## License
 
-This project makes use of work derived from the [Seattle Ruby Brigade](https://github.com/seattlerb/) available [here](https://github.com/seattlerb/omnifocus). As a result, some parts of this codebase are (c) Ryan Davis, seattle.rb.
+This project makes use of work from these people (thanks!):
+* the [Seattle Ruby Brigade](https://github.com/seattlerb/) available [here](https://github.com/seattlerb/omnifocus). As a result, some parts of this codebase are (c) Ryan Davis, seattle.rb.
+* [OTask](https://github.com/ttscoff/OTask/) by (Brett Terpstra)[http://www.brettterpstra.com]
 
 THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND,
 EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF

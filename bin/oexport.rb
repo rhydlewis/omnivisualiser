@@ -24,13 +24,15 @@ require 'json'
 require 'ostruct'
 require 'optparse'
 
-require '../lib/omnivisualiser/omnifocus'
-require '../lib/omnivisualiser/item'
-require '../lib/omnivisualiser/folder'
-require '../lib/omnivisualiser/project'
-require '../lib/omnivisualiser/task'
-require '../lib/omnivisualiser/context'
-require '../lib/opmlexport'
+$: << File.join(File.dirname(__FILE__), "/../lib")
+
+require 'omnivisualiser/omnifocus'
+require 'omnivisualiser/item'
+require 'omnivisualiser/folder'
+require 'omnivisualiser/project'
+require 'omnivisualiser/task'
+require 'omnivisualiser/context'
+require 'opmlexport'
 
 class OExport
   VERSION = '0.1'
@@ -44,7 +46,7 @@ class OExport
     @banner = "Usage: oexport [options] format"
     @format = "  where 'format' is either:\n" +
       "    * 'opml' to output OmniFocus data as OPML data\n" +
-      "    * 'json' to output OmniFocus data as a JSON string\n"
+      "    * 'json' to output OmniFocus data as a JSON string\n" +
       "    * 'hash' to output OmniFocus data as {data}.inspect\n"
   end
 
@@ -65,7 +67,7 @@ class OExport
       # Specify options
       opts = OptionParser.new
       opts.banner = @banner
-      opts.on('-d', '--dropped', 'Include dropped projects in output') { @options.dropped = true }
+      opts.on('-d', '--dropped', 'Include dropped folders and projects in output') { @options.dropped = true }
       opts.on('-c', '--completed', 'Include completed projects and tasks in output') { @options.completed = true }
       opts.on('-h', '--help', 'Display this screen' ) do
         puts opts
